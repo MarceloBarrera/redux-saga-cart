@@ -12,6 +12,7 @@ import { getQuery } from './utility'
 import { reducer } from './combineReducers';
 import { defaultState } from './defaultState';
 import createSagaMiddleware from 'redux-saga';
+import {initSagas} from './initSagas';
 
 const stateTransformer = (state) => {
     if (Iterable.isIterable(state)) return state.toJS();
@@ -26,7 +27,6 @@ export const getStore = ()=>{
     const sagaMiddleware = createSagaMiddleware();
     const middleWares = [sagaMiddleware, thunk];
     if (getQuery()['logger']) { middleWares.push(logger)}
-    const composables = [applyMiddleware(...middleWares)]
     const enhancer = compose(
         ... composables
     );
@@ -35,6 +35,7 @@ export const getStore = ()=>{
         defaultState,
         enhancer
     );
-     console.log('Saga middleware implemented');
+    console.log('Saga middleware implemented');
+    initSagas(sagaMiddleware);//sagas can only be initialized after sagas has been placed after inside store
     return store;
 };
