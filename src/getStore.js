@@ -27,6 +27,7 @@ export const getStore = ()=>{
     const sagaMiddleware = createSagaMiddleware();
     const middleWares = [sagaMiddleware, thunk];
     if (getQuery()['logger']) { middleWares.push(logger)}
+    const composables = [applyMiddleware(...middleWares)];
     const enhancer = compose(
         ... composables
     );
